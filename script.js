@@ -7,12 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
     hamburger.addEventListener('click', () => {
         // Toggle Nav
         navLinks.classList.toggle('active');
-        hamburger.classList.toggle('active'); // Animate hamburger
-        
+        hamburger.classList.toggle('active');
+
         // Prevent body scroll when menu is open
         document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : 'auto';
     });
-    
+
     // Close mobile menu when a link is clicked
     links.forEach(link => {
         link.addEventListener('click', () => {
@@ -26,17 +26,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            
+
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
-            
+
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
                 // Account for fixed header
-                const headerOffset = 80;
+                const headerOffset = 90;
                 const elementPosition = targetElement.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-        
+
                 window.scrollTo({
                     top: offsetPosition,
                     behavior: "smooth"
@@ -47,14 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Header Background Change on Scroll
     const header = document.querySelector('.header');
-    
+
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
-            header.style.padding = '0.8rem 0';
+        if (window.scrollY > 30) {
+            header.classList.add('scrolled');
         } else {
-            header.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)';
-            header.style.padding = '1.2rem 0';
+            header.classList.remove('scrolled');
         }
     });
 
@@ -68,14 +66,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('appear');
-                observer.unobserve(entry.target); // Only animate once
+                entry.target.classList.add('active'); // Changed from 'appear' to 'active' to match new CSS
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
 
-    const fadeElements = document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right, .fade-in-up');
+    // Select all elements to animate (including new ones)
+    const fadeElements = document.querySelectorAll('.fade-in, .service-card, .about-content, .about-image, .contact-wrapper');
     fadeElements.forEach(el => {
+        el.classList.add('reveal'); // Add reveal class initially
         observer.observe(el);
     });
 });
